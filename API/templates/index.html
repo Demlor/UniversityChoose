@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gợi ý ngành nghề</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        select, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        button:hover:enabled {
+            background-color: #218838;
+        }
+
+        .checkbox-group {
+            display: grid;
+            gap: 10px;
+        }
+
+        #subjectsOptions {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        #strengthsOptions, #interestsOptions {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+
+        #results {
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #results h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        #results p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        #load-more {
+            max-width: 700px;
+            margin: 20px auto;
+            display: block;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #load-more:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        #load-more:hover:enabled {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gợi ý ngành nghề</h1>
+
+    <form id="careerForm">
+        <!-- ComboBox MBTI -->
+        <h3>MBTI</h3>
+        <select id="mbti" required>
+            <option value="" disabled selected>Chọn MBTI</option>
+            {% for option in mbti_options %}
+            <option value="{{ option }}">{{ option }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Checkbox Tổ hợp môn -->
+        <h3>Tổ hợp môn</h3>
+        <div class="checkbox-group" id="subjectsOptions">
+            {% for option in subject_combination_options %}
+            <label>
+                <input type="checkbox" id="subject-{{ loop.index }}" name="subjects" value="{{ option }}">
+                {{ option }}
+            </label>
+            {% endfor %}
+        </div>
+
+        <!-- Checkbox Khả năng và Điểm mạnh -->
+        <h3>Khả năng và Điểm mạnh</h3>
+        <div class="checkbox-group" id="strengthsOptions">
+            {% for option in strengths_options %}
+            <label>
+                <input type="checkbox" id="strength-{{ loop.index }}" name="strengths" value="{{ option }}">
+                {{ option }}
+            </label>
+            {% endfor %}
+        </div>
+
+        <!-- Checkbox Sở thích và Đam mê -->
+        <h3>Sở thích và Đam mê</h3>
+        <div class="checkbox-group" id="interestsOptions">
+            {% for option in interests_options %}
+            <label>
+                <input type="checkbox" id="interest-{{ loop.index }}" name="interests" value="{{ option }}">
+                {{ option }}
+            </label>
+            {% endfor %}
+        </div>
+
+        <button id="submitButton" type="button" disabled>Gửi</button>
+    </form>
+
+    <div id="results"></div>
+    <button id="load-more" data-page="1" style="display:none;">Xem thêm</button>
+
+    <script>
+        const mbtiSelect = document.getElementById("mbti");
+        const subjectsInputs = document.querySelectorAll('input[name="subjects"]');
+        const strengthsInputs = document.querySelectorAll('input[name="strengths"]');
+        const interestsInputs = document.querySelectorAll('input[name="interests"]');
+        const submitButton = document.getElementById("submitButton");
+        const loadMoreButton = document.getElementById("load-more");
+        const resultsDiv = document.getElementById("results");
+
+        let page = 1; // Khởi tạo trang đầu tiên
+        const size = 5; // Số kết quả mỗi trang
+
+        function validateForm() {
+            const mbtiSelected = mbtiSelect.value !== "";
+            const subjectsChecked = Array.from(subjectsInputs).some(input => input.checked);
+            const strengthsChecked = Array.from(strengthsInputs).some(input => input.checked);
+            const interestsChecked = Array.from(interestsInputs).some(input => input.checked);
+
+            submitButton.disabled = !(mbtiSelected && subjectsChecked && strengthsChecked && interestsChecked);
+        }
+
+        mbtiSelect.addEventListener("change", validateForm);
+        subjectsInputs.forEach(input => input.addEventListener("change", validateForm));
+        strengthsInputs.forEach(input => input.addEventListener("change", validateForm));
+        interestsInputs.forEach(input => input.addEventListener("change", validateForm));
+
+        async function fetchResults(isLoadMore = false) {
+            const mbti = mbtiSelect.value;
+            const subjects = Array.from(subjectsInputs).filter(input => input.checked).map(input => input.value);
+            const strengths = Array.from(strengthsInputs).filter(input => input.checked).map(input => input.value);
+            const interests = Array.from(interestsInputs).filter(input => input.checked).map(input => input.value);
+
+            const response = await fetch("/recommend-career", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ mbti, subjects, strengths, interests, page, size })
+            });
+
+            const recommendations = await response.json();
+
+            if (!isLoadMore) {
+                resultsDiv.innerHTML = "<h3>Gợi ý ngành nghề:</h3>";
+            }
+
+            if (recommendations.length > 0) {
+                recommendations.forEach(rec => {
+                    resultsDiv.innerHTML += `<p>${rec.career} - Độ phù hợp: ${rec.score}</p>`;
+                });
+
+                if (recommendations.length === size) {
+                    loadMoreButton.style.display = "block";
+                    page++;
+                } else {
+                    loadMoreButton.style.display = "none";
+                }
+            } else {
+                loadMoreButton.style.display = "none";
+            }
+        }
+
+        submitButton.addEventListener("click", () => {
+            page = 1;
+            fetchResults(false);
+        });
+
+        loadMoreButton.addEventListener("click", () => {
+            fetchResults(true);
+        });
+    </script>
+</body>
+</html>
