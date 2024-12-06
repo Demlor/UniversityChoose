@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dự đoán Ngành Nghề</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Đánh giá Ngành Nghề Phù Hợp</h2>
+        <form id="survey-form" method="POST" action="/submit">
+            <!-- Câu hỏi 1 -->
+            <div class="form-group">
+                <label for="family_advice">Bạn có nhận được sự tư vấn của gia đình không?</label>
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('family_advice').value='Có'">Có</button>
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('family_advice').value='Không'">Không</button>
+                <input type="hidden" name="family_advice" id="family_advice">
+            </div>
+
+            <!-- Câu hỏi 2 -->
+            <div class="form-group">
+                <label for="financial_influence">Tài chính có ảnh hưởng đến vấn đề chọn ngành chọn trường của bạn không?</label>
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('financial_influence').value='Có'">Có</button>
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('financial_influence').value='Không'">Không</button>
+                <input type="hidden" name="financial_influence" id="financial_influence">
+            </div>
+
+            <!-- Câu hỏi 3 -->
+            <div class="form-group">
+                <label for="family_industry">Gia đình của bạn có đang làm trong lĩnh vực nào không?</label>
+                <button type="button" class="btn btn-primary" onclick="toggleFields('yes')">Có</button>
+                <button type="button" class="btn btn-secondary" onclick="toggleFields('no')">Không</button>
+                <input type="hidden" name="family_industry" id="family_industry">
+            </div>
+
+            <!-- Lĩnh vực gia đình -->
+            <div id="fields-container" class="form-group" style="display: none;">
+                <label for="family_industry_select">Chọn lĩnh vực</label>
+                <select class="form-control" id="family_industry_select" name="family_industry_select">
+                    {% for field in fields %}
+                        <option value="{{ field }}">{{ field }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-success">Gửi</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleFields(option) {
+            var fieldsContainer = document.getElementById('fields-container');
+            var familyIndustryInput = document.getElementById('family_industry');
+
+            if (option === 'yes') {
+                fieldsContainer.style.display = 'block';
+                familyIndustryInput.value = 'Có';
+            } else {
+                fieldsContainer.style.display = 'none';
+                familyIndustryInput.value = 'Không';
+            }
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
