@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gợi ý ngành nghề</title>
+    <style>
+        /* CSS giữ nguyên như trong file của bạn */
+        /* Bỏ qua vì nội dung không thay đổi */
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Gợi ý ngành nghề</h1>
+    <form id="careerForm">
+        <!-- Câu hỏi 1 -->
+        <div class="form-group">
+            <label for="family_advice">Bạn có nhận được sự tư vấn của gia đình không?</label>
+            <button type="button" class="btn btn-primary" onclick="document.getElementById('family_advice').value='Có'">Có</button>
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('family_advice').value='Không'">Không</button>
+            <input type="hidden" name="family_advice" id="family_advice">
+        </div>
+
+        <!-- Câu hỏi 2 -->
+        <div class="form-group">
+            <label for="financial_influence">Tài chính có ảnh hưởng đến vấn đề chọn ngành chọn trường của bạn không?</label>
+            <button type="button" class="btn btn-primary" onclick="document.getElementById('financial_influence').value='Có'">Có</button>
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('financial_influence').value='Không'">Không</button>
+            <input type="hidden" name="financial_influence" id="financial_influence">
+        </div>
+
+        <!-- Câu hỏi 3 -->
+        <div class="form-group">
+            <label for="family_industry">Gia đình của bạn có đang làm trong lĩnh vực nào không?</label>
+            <button type="button" class="btn btn-primary" onclick="toggleFields('yes')">Có</button>
+            <button type="button" class="btn btn-secondary" onclick="toggleFields('no')">Không</button>
+            <input type="hidden" name="family_industry" id="family_industry">
+        </div>
+
+        <!-- Lĩnh vực gia đình -->
+        <div id="fields-container" class="form-group" style="display: none;">
+            <label for="family_industry_select">Chọn lĩnh vực</label>
+            <select class="form-control" id="family_industry_select" name="family_industry_select">
+                {% for field in field_options %}
+                <option value="{{ field }}">{{ field }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    
+        <!-- ComboBox MBTI -->
+        <h3>MBTI</h3>
+        <select id="mbti" required>
+            <option value="" disabled selected>Chọn MBTI</option>
+            {% for option in mbti_options %}
+            <option value="{{ option }}">{{ option }}</option>
+            {% endfor %}
+        </select>
+
+        <h3>Tổ hợp môn</h3>
+        <div class="checkbox-group">
+            {% for option in subject_combination_options %}
+            <label>
+                <input type="checkbox" name="subjects" value="{{ option }}"> {{ option }}
+            </label>
+            {% endfor %}
+        </div>
+
+        <h3>Khả năng và Điểm mạnh</h3>
+        <div class="checkbox-group">
+            {% for option in strengths_options %}
+            <label>
+                <input type="checkbox" name="strengths" value="{{ option }}"> {{ option }}
+            </label>
+            {% endfor %}
+        </div>
+
+        <h3>Sở thích</h3>
+        <div class="checkbox-group">
+            {% for option in interests_options %}
+            <label>
+                <input type="checkbox" name="interests" value="{{ option }}"> {{ option }}
+            </label>
+            {% endfor %}
+        </div>
+        <button type="submit" id="submit">Gửi</button>
+    </form>
+    <script>
+        function toggleFields(value) {
+            if (value === 'yes') {
+                document.getElementById('fields-container').style.display = 'block';
+            } else {
+                document.getElementById('fields-container').style.display = 'none';
+            }
+        }
+    </script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
