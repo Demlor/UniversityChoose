@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gợi ý ngành nghề</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Gợi ý ngành nghề phù hợp</h1>
+        <form id="careerForm">
+            <!-- Câu hỏi 1 -->
+            <div class="form-group">
+                <label for="family_advice">Bạn có nhận được sự tư vấn của gia đình không?</label>
+                <button type="button" onclick="setAnswer('family_advice', 'Có', this)">Có</button>
+                <button type="button" onclick="setAnswer('family_advice', 'Có, nhưng không nhiều', this)">Có, nhưng không nhiều</button>
+                <button type="button" onclick="setAnswer('family_advice', 'Không', this)">Không</button>
+                <input type="hidden" name="family_advice" id="family_advice">
+            </div>
+
+            <!-- Câu hỏi 2 -->
+            <div class="form-group">
+                <label for="financial_influence">Tài chính có ảnh hưởng đến vấn đề chọn ngành chọn trường của bạn không?</label>
+                <button type="button" onclick="setAnswer('financial_influence', 'Có', this)">Có</button>
+                <button type="button" onclick="setAnswer('financial_influence', 'Không', this)">Không</button>
+                <input type="hidden" name="financial_influence" id="financial_influence">
+            </div>
+
+            <!-- Câu hỏi 3 -->
+            <div class="form-group">
+                <label for="family_industry">Gia đình của bạn có đang làm trong lĩnh vực nào không?</label>
+                <button type="button" onclick="toggleFields('yes', 'family_industry', this)">Có</button>
+                <button type="button" onclick="toggleFields('no', 'family_industry', this)">Không</button>
+                <input type="hidden" name="family_industry" id="family_industry">
+            </div>
+
+            <!-- Lĩnh vực gia đình -->
+            <div id="fields-container_3" class="form-group" style="display: none;">
+                <label for="family_industry_select">Chọn lĩnh vực</label>
+                <select class="form-control" id="family_industry_select" name="family_industry_select">
+                    {% for field in fields %}
+                        <option value="{{ field }}">{{ field }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- ComboBox MBTI -->
+            <h3>MBTI</h3>
+            <select id="mbti" required>
+                <option value="" disabled selected>Chọn MBTI</option>
+                {% for option in mbti_options %}
+                    <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <!-- Checkbox Tổ hợp môn -->
+            <h3>Tổ hợp môn</h3>
+            <div class="checkbox-group" id="subjectsOptions">
+                {% for option in subject_combination_options %}
+                    <label>
+                        <input type="checkbox" id="subject-{{ loop.index }}" name="subjects" value="{{ option }}">
+                        {{ option }}
+                    </label>
+                {% endfor %}
+            </div>
+
+            <!-- Checkbox Khả năng và Điểm mạnh -->
+            <h3>Khả năng và Điểm mạnh</h3>
+            <div class="checkbox-group" id="strengthsOptions">
+                {% for option in strengths_options %}
+                    <label>
+                        <input type="checkbox" id="strength-{{ loop.index }}" name="strengths" value="{{ option }}">
+                        {{ option }}
+                    </label>
+                {% endfor %}
+            </div>
+            
+            <!-- Checkbox Sở thích và Đam mê -->
+            <h3>Sở thích và Đam mê</h3>
+            <div class="checkbox-group" id="interestsOptions">
+                {% for option in interests_options %}
+                    <label>
+                        <input type="checkbox" id="interest-{{ loop.index }}" name="interests" value="{{ option }}">
+                        {{ option }}
+                    </label>
+                {% endfor %}
+            </div>
+
+            <button type="submit" id="submit">Gửi</button>
+        </form>
+    </div>
+
+    <!-- Kết quả người dùng đã chọn -->
+    <div id="result" class="result-container">
+        <h4>Kết quả bạn đã chọn:</h4>
+        <p><strong>Câu 1:</strong> <span id="result_family_advice"></span></p>
+        <p><strong>Câu 2:</strong> <span id="result_financial_influence"></span></p>
+        <p><strong>Câu 3:</strong> <span id="result_family_industry"></span></p>
+        <p><strong>Lĩnh vực gia đình:</strong> <span id="result_family_industry_select"></span></p>
+    </div>
+    <div id="results"></div>
+    <button id="load-more" data-page="1" style="display:none;">Xem thêm</button>
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
