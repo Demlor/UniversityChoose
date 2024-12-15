@@ -11,27 +11,33 @@
         <h1>Gợi ý ngành nghề phù hợp</h1>
         <form id="careerForm">
             <!-- Câu hỏi 1 -->
-            <div class="form-group">
+            <div class="form-group" style="border: 2px solid #000; padding: 20px; background-color: #f0f0f0;">
                 <label for="family_advice">Bạn có nhận được sự tư vấn của gia đình không?</label>
-                <button type="button" onclick="setAnswer('family_advice', 'Có', this)">Có</button>
-                <button type="button" onclick="setAnswer('family_advice', 'Có, nhưng không nhiều', this)">Có, nhưng không nhiều</button>
-                <button type="button" onclick="setAnswer('family_advice', 'Không', this)">Không</button>
+                <div>
+                    <button type="button" onclick="setAnswer('family_advice', 'Có', this)">Có</button>
+                    <button type="button" onclick="setAnswer('family_advice', 'Có, nhưng không nhiều', this)">Có, nhưng không nhiều</button>
+                    <button type="button" onclick="setAnswer('family_advice', 'Không', this)">Không</button>
+                </div>
                 <input type="hidden" name="family_advice" id="family_advice">
             </div>
 
             <!-- Câu hỏi 2 -->
-            <div class="form-group">
+            <div class="form-group" style="border: 2px solid #000; padding: 20px; background-color: #f0f0f0;">
                 <label for="financial_influence">Tài chính có ảnh hưởng đến vấn đề chọn ngành chọn trường của bạn không?</label>
-                <button type="button" onclick="setAnswer('financial_influence', 'Có', this)">Có</button>
-                <button type="button" onclick="setAnswer('financial_influence', 'Không', this)">Không</button>
+                <div>
+                    <button type="button" onclick="setAnswer('financial_influence', 'Có', this)">Có</button>
+                    <button type="button" onclick="setAnswer('financial_influence', 'Không', this)">Không</button>
+                </div>
                 <input type="hidden" name="financial_influence" id="financial_influence">
             </div>
 
             <!-- Câu hỏi 3 -->
-            <div class="form-group">
+            <div class="form-group" style="border: 2px solid #000; padding: 20px; background-color: #f0f0f0;">
                 <label for="family_industry">Gia đình của bạn có đang làm trong lĩnh vực nào không?</label>
-                <button type="button" onclick="toggleFields('yes', 'family_industry', this)">Có</button>
-                <button type="button" onclick="toggleFields('no', 'family_industry', this)">Không</button>
+                <div>
+                    <button type="button" onclick="toggleFields('yes', 'family_industry', this)">Có</button>
+                    <button type="button" onclick="toggleFields('no', 'family_industry', this)">Không</button>
+                </div>
                 <input type="hidden" name="family_industry" id="family_industry">
             </div>
 
@@ -55,16 +61,206 @@
             </select>
 
             <!-- Checkbox Tổ hợp môn -->
-            <h3>Tổ hợp môn</h3>
-            <div class="checkbox-group" id="subjectsOptions">
-                {% for option in subject_combination_options %}
-                    <label>
-                        <input type="checkbox" id="subject-{{ loop.index }}" name="subjects" value="{{ option }}">
-                        {{ option }}
-                    </label>
-                {% endfor %}
+            
+            <!-- Checkbox Tổ hợp môn A -->
+            <h4 id="subject-combinations-header">Tổ hợp môn</h4>
+            
+            <div style="border: 2px solid #000; padding: 20px; background-color: #f0f0f0;">
+                <div class="menu-tree" style="display: flex; flex-wrap: wrap; gap: 20px;">
+                    <div class="label-item multiple custom-cursor-on-hover" style="flex: 1; min-width: 200px;">
+                        <label style="font-weight: bold; color: #0e1212; border: 3px solid #000; padding: 10px;">
+                            Tổ hợp môn A
+                        </label>
+                        <ul class="submenu" style="display: none; border: 5px solid #000; padding: 10px; background-color: #e0f7fa;">
+                            {% for option in subject_combination_options if option.startswith('A') %}
+                                <input type="checkbox" id="subject-{{ loop.index }}" name="subjects" value="{{ option }}">
+                                {{ option }}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="label-item multiple custom-cursor-on-hover" style="flex: 1; min-width: 200px;">
+                        <label style="font-weight: bold; color: #0e1212; border: 3px solid #000; padding: 10px;">
+                            Tổ hợp môn B
+                        </label>
+                        <ul class="submenu" style="display: none; border: 5px solid #000; padding: 10px; background-color: #e0f7fa;">
+                            {% for option in subject_combination_options if option.startswith('B') %}
+                                <label>
+                                    <input type="checkbox" id="subject-{{ loop.index }}" name="subjects" value="{{ option }}">
+                                    {{ option }}
+                                </label>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="label-item multiple custom-cursor-on-hover" style="flex: 1; min-width: 200px;">
+                        <label style="font-weight: bold; color:  #0e1212; border: 3px solid #000; padding: 10px;">
+                            Tổ hợp môn C
+                        </label>
+                        <ul class="submenu" style="display: none; border: 5px solid #000; padding: 10px; background-color: #e0f7fa;">
+                            {% for option in subject_combination_options if option.startswith('C') %}
+                                <label>
+                                    <input type="checkbox" id="subject-{{ loop.index }}" name="subjects" value="{{ option }}">
+                                    {{ option }}
+                                </label>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="label-item multiple custom-cursor-on-hover" style="flex: 1; min-width: 200px;">
+                        <label style="font-weight: bold; color:  #0e1212; border: 3px solid #000; padding: 10px;">
+                            Tổ hợp môn D
+                        </label>
+                        <ul class="submenu" style="display: none; border: 5px solid #000; padding: 10px; background-color: #e0f7fa;">
+                            {% for option in subject_combination_options if option.startswith('D') %}
+                                <input type="checkbox" id="subject-{{ loop.index }}" name="subjects" value="{{ option }}">
+                                {{ option }}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="label-item multiple custom-cursor-on-hover" style="flex: 1; min-width: 200px;">
+                        <label style="font-weight: bold; color:  #0e1212; border: 3px solid #000; padding: 10px;">
+                            Tổ hợp môn N
+                        </label>
+                        <ul class="submenu" style="display: none; border: 5px solid #000; padding: 10px; background-color: #e0f7fa;">
+                            {% for option in subject_combination_options if option.startswith('N') %}
+                                <label>
+                                    <input type="checkbox" id="subject-{{ loop.index }}" name="subjects" value="{{ option }}">
+                                    {{ option }}
+                                </label>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="label-item multiple custom-cursor-on-hover" style="flex: 1; min-width: 200px;">
+                        <label style="font-weight: bold; color:  #0e1212; border: 3px solid #000; padding: 10px;">
+                            Tổ hợp môn S
+                        </label>
+                        <ul class="submenu" style="display: none; border: 5px solid #000; padding: 10px; background-color: #e0f7fa;">
+                            {% for option in subject_combination_options if option.startswith('S') %}
+                                <label>
+                                    <input type="checkbox" id="subject-{{ loop.index }}" name="subjects" value="{{ option }}">
+                                    {{ option }}
+                                </label>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
             </div>
 
+            <script>
+                document.querySelectorAll('.label-item').forEach(item => {
+                    item.addEventListener('mouseenter', () => {
+                        const submenu = item.querySelector('.submenu');
+                        if (submenu) {
+                            submenu.style.display = 'block';
+                        }
+                    });
+                    item.addEventListener('mouseleave', () => {
+                        const submenu = item.querySelector('.submenu');
+                        if (submenu) {
+                            submenu.style.display = 'none';
+                        }
+                    });
+                });
+            </script>
+            
+            <!-- Modal -->
+            <div id="resultModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Kết quả</h2>
+                    <pre id="modalResult"></pre>
+                </div>
+            </div>
+
+            <script>
+                // Get the modal
+                var modal = document.getElementById("resultModal");
+
+                // Get the <span> element that closes the modal
+                var span = document.getElementsByClassName("close")[0];
+
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function() {
+                    modal.style.display = "none";
+                }
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+
+                document.getElementById("careerForm").addEventListener("submit", function(event) {
+                    event.preventDefault();
+                    if (confirm("Bạn có chắc chắn muốn gửi không?")) {
+                        var formData = new FormData(this);
+                        var data = {};
+                        formData.forEach((value, key) => {
+                            data[key] = value;
+                        });
+
+                        fetch('/submit', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })
+                        .then(response => response.json())
+                        .then(responseData => {
+                            console.log('Kết quả gửi form:', responseData);
+                            document.getElementById("modalResult").textContent = JSON.stringify(responseData, null, 2);
+                            modal.style.display = "block";
+
+                            // Display the results in the result container
+                            document.getElementById("result_family_advice").textContent = responseData.family_advice || '';
+                            document.getElementById("result_financial_influence").textContent = responseData.financial_influence || '';
+                            document.getElementById("result_family_industry").textContent = responseData.family_industry || '';
+                            document.getElementById("result_family_industry_select").textContent = responseData.family_industry_select || '';
+                        })
+                        .catch(error => {
+                            console.error('Lỗi khi gửi form:', error);
+                        });
+                    }
+                });
+            </script>
+
+            <style>
+                .modal {
+                    display: none;
+                    position: fixed;
+                    z-index: 1;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    overflow: auto;
+                    background-color: rgb(0,0,0);
+                    background-color: rgba(0,0,0,0.4);
+                    padding-top: 60px;
+                }
+
+                .modal-content {
+                    background-color: #fefefe;
+                    margin: 5% auto;
+                    padding: 20px;
+                    border: 1px solid #888;
+                    width: 80%;
+                }
+
+                .close {
+                    color: #aaa;
+                    float: right;
+                    font-size: 28px;
+                    font-weight: bold;
+                }
+
+                .close:hover,
+                .close:focus {
+                    color: black;
+                    text-decoration: none;
+                    cursor: pointer;
+                }
+            </style> 
             <!-- Checkbox Khả năng và Điểm mạnh -->
             <h3>Khả năng và Điểm mạnh</h3>
             <div class="checkbox-group" id="strengthsOptions">
