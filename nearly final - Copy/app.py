@@ -1,7 +1,7 @@
-from flask import Flask, request, jsonify, render_template
-import pandas as pd
+from flask import Flask, request, jsonify, render_template 
+import pandas as pd 
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.metrics.pairwise import cosine_similarity 
 import ast
 import os
 
@@ -9,7 +9,7 @@ import os
 app = Flask(__name__)
 
 # File paths
-file_path_backend = './data/Sorted_Ngành_Nghề.xlsx'  # Backend data Excel file
+file_path_backend = './data/Sorted_Ngành_Nghề.xlsx'  # Backend data Excel file
 file_path_frontend = './data/Book1.xlsx'  # Frontend data Excel file
 file_path_family = './data/FamilyFactor.xlsx'
 
